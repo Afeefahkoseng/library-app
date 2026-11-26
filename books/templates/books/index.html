@@ -1,0 +1,15 @@
+{% extends "books/layout.html" %}
+
+{% block body %}
+    <h1>รายการหนังสือ</h1>
+    <ul>
+        {% for book in books %}
+            <li>
+                <a href="{% url 'books:book' book.id %}">{{ book.title }}</a>
+                (เหลือ {{ book.available }} เล่ม)
+            </li>
+        {% empty %}
+            <li>ยังไม่มีหนังสือ</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

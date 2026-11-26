@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="th">
+    <head>
+        <meta charset="utf-8">
+        <title>Borrow Days</title>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+
+                let days = 1;
+
+                document.querySelector('#increase').onclick = () => {
+                    if (days < 7) {
+                        days++;
+                    }
+                    document.querySelector('h1').innerHTML = days;
+                };
+
+                document.querySelector('#decrease').onclick = () => {
+                    if (days > 1) {
+                        days--;
+                    }
+                    document.querySelector('h1').innerHTML = days;
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <p>จำนวนวันที่ยืม (1-7 วัน)</p>
+        <h1>1</h1>
+        <button id="increase">+</button>
+        <button id="decrease">-</button>
+    </body>
+</html>

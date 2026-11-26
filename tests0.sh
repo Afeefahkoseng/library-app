@@ -1,0 +1,5 @@
+python -c "from tests0 import test_borrow; test_borrow(-1, False)"
+python -c "from tests0 import test_borrow; test_borrow(0, True)"
+python -c "from tests0 import test_borrow; test_borrow(2, True)"
+python -c "from tests0 import test_borrow; test_borrow(3, False)"
+python -c "from tests0 import test_borrow; test_borrow(10, False)"

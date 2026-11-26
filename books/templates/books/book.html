@@ -1,0 +1,28 @@
+{% extends "books/layout.html" %}
+
+{% block body %}
+    <h1>{{ book.title }}</h1>
+    <p>เหลือ {{ book.available }} จาก {{ book.copies }} เล่ม</p>
+
+    <h2>คนที่ยืมอยู่</h2>
+    <ul>
+        {% for member in borrowers %}
+            <li>{{ member }}</li>
+        {% empty %}
+            <li>ยังไม่มีคนยืม</li>
+        {% endfor %}
+    </ul>
+
+    <h2>ยืมหนังสือ</h2>
+    <form action="{% url 'books:borrow' book.id %}" method="post">
+        {% csrf_token %}
+        <select name="member">
+            {% for member in non_borrowers %}
+                <option value="{{ member.id }}">{{ member }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="ยืม">
+    </form>
+
+    <a href="{% url 'books:index' %}">กลับหน้ารายการ</a>
+{% endblock %}
