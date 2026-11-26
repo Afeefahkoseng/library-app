@@ -9,7 +9,7 @@ class Book(models.Model):
         return self.title
 
     def is_valid_book(self):
-        return self.title != "" or self.copies >= 0
+        return self.title != "" and self.copies >= 0
 
     def available(self):
         return self.copies - self.borrowers.count()
