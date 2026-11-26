@@ -2,14 +2,21 @@
 
 {% block body %}
     <h1>รายการหนังสือ</h1>
-    <ul>
+    <p class="sub">เลือกหนังสือเพื่อดูผู้ยืมและยืมเพิ่ม</p>
+    <ul class="list">
         {% for book in books %}
             <li>
-                <a href="{% url 'books:book' book.id %}">{{ book.title }}</a>
-                (เหลือ {{ book.available }} เล่ม)
+                <a class="row{% if book.available <= 0 %} out{% endif %}" href="{% url 'books:book' book.id %}">
+                    <span class="title">{{ book.title }}</span>
+                    {% if book.available > 0 %}
+                        <span class="badge">เหลือ {{ book.available }} เล่ม</span>
+                    {% else %}
+                        <span class="badge out">ถูกยืมหมดแล้ว</span>
+                    {% endif %}
+                </a>
             </li>
         {% empty %}
-            <li>ยังไม่มีหนังสือ</li>
+            <li class="panel">ยังไม่มีหนังสือ เพิ่มได้ที่ <a href="/admin/">หน้าแอดมิน</a></li>
         {% endfor %}
     </ul>
 {% endblock %}

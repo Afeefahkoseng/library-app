@@ -2,10 +2,130 @@
 <html lang="th">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ห้องสมุด</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600&family=Noto+Serif+Thai:wght@600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --paper: #eef2ef;
+                --card: #ffffff;
+                --ink: #16302b;
+                --muted: #5b6f6a;
+                --line: #d3ddd8;
+                --green: #1f6f5c;
+                --green-dark: #165243;
+                --amber: #e2a72e;
+                --red: #b24a3a;
+                --sans: "Noto Sans Thai", "Sarabun", system-ui, sans-serif;
+                --serif: "Noto Serif Thai", "Noto Serif", Georgia, serif;
+            }
+            * { box-sizing: border-box; }
+            body {
+                margin: 0;
+                background: var(--paper);
+                color: var(--ink);
+                font: 400 1rem/1.7 var(--sans);
+            }
+            .topbar {
+                background: var(--ink);
+                color: #fff;
+            }
+            .topbar a {
+                display: inline-block;
+                padding: 0.9rem 1.25rem;
+                color: #fff;
+                text-decoration: none;
+                font: 700 1.15rem var(--serif);
+            }
+            main {
+                max-width: 44rem;
+                margin: 0 auto;
+                padding: 2rem 1.25rem 4rem;
+            }
+            h1 {
+                margin: 0 0 0.25rem;
+                font: 700 2rem/1.35 var(--serif);
+            }
+            h2 {
+                margin: 2rem 0 0.75rem;
+                font: 600 1.15rem/1.4 var(--serif);
+            }
+            .sub { margin: 0 0 1.5rem; color: var(--muted); }
+            a { color: var(--green); }
+            a:focus-visible, button:focus-visible, select:focus-visible {
+                outline: 3px solid var(--amber);
+                outline-offset: 2px;
+            }
+            .list { list-style: none; margin: 0; padding: 0; }
+            .row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                margin-bottom: 0.6rem;
+                padding: 0.9rem 1.1rem;
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-left: 8px solid var(--green);
+                border-radius: 4px;
+                color: var(--ink);
+                text-decoration: none;
+            }
+            a.row:hover { border-color: var(--green); background: #f8fbfa; }
+            .row.out { border-left-color: var(--line); }
+            .row .title { font-weight: 600; }
+            .badge {
+                flex: none;
+                padding: 0.1rem 0.75rem;
+                border-radius: 999px;
+                background: #dcefe8;
+                color: var(--green-dark);
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+            .badge.out { background: #f4ddd8; color: var(--red); }
+            .panel {
+                padding: 1.25rem;
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-radius: 4px;
+            }
+            .stock { display: flex; align-items: baseline; gap: 0.5rem; }
+            .stock strong { font: 700 2.5rem/1 var(--serif); color: var(--green); }
+            .stock.out strong { color: var(--red); }
+            form { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+            select {
+                flex: 1 1 12rem;
+                padding: 0.6rem 0.75rem;
+                border: 1px solid var(--line);
+                border-radius: 4px;
+                background: #fff;
+                color: var(--ink);
+                font: inherit;
+            }
+            button {
+                padding: 0.6rem 1.75rem;
+                border: 0;
+                border-radius: 4px;
+                background: var(--green);
+                color: #fff;
+                font: 600 1rem var(--sans);
+                cursor: pointer;
+            }
+            button:hover { background: var(--green-dark); }
+            .note { margin: 0; color: var(--muted); }
+            .back { display: inline-block; margin-top: 2rem; }
+        </style>
     </head>
     <body>
-        {% block body %}
-        {% endblock %}
+        <header class="topbar">
+            <a href="{% url 'books:index' %}">ห้องสมุด</a>
+        </header>
+        <main>
+            {% block body %}
+            {% endblock %}
+        </main>
     </body>
 </html>

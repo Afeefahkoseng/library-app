@@ -2,27 +2,38 @@
 
 {% block body %}
     <h1>{{ book.title }}</h1>
-    <p>เหลือ {{ book.available }} จาก {{ book.copies }} เล่ม</p>
+    <div class="stock{% if book.available <= 0 %} out{% endif %}">
+        <strong>{{ book.available }}</strong>
+        <span>เล่มที่ว่าง จากทั้งหมด {{ book.copies }} เล่ม</span>
+    </div>
 
     <h2>คนที่ยืมอยู่</h2>
-    <ul>
+    <ul class="list">
         {% for member in borrowers %}
-            <li>{{ member }}</li>
+            <li class="row">{{ member }}</li>
         {% empty %}
-            <li>ยังไม่มีคนยืม</li>
+            <li class="panel note">ยังไม่มีคนยืม</li>
         {% endfor %}
     </ul>
 
     <h2>ยืมหนังสือ</h2>
-    <form action="{% url 'books:borrow' book.id %}" method="post">
-        {% csrf_token %}
-        <select name="member">
-            {% for member in non_borrowers %}
-                <option value="{{ member.id }}">{{ member }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="ยืม">
-    </form>
+    <div class="panel">
+        {% if book.available <= 0 %}
+            <p class="note">หนังสือเล่มนี้ถูกยืมหมดแล้ว</p>
+        {% elif not non_borrowers %}
+            <p class="note">ยังไม่มีสมาชิกที่ยืมได้ เพิ่มสมาชิกที่ <a href="/admin/">หน้าแอดมิน</a></p>
+        {% else %}
+            <form action="{% url 'books:borrow' book.id %}" method="post">
+                {% csrf_token %}
+                <select name="member" aria-label="เลือกสมาชิก">
+                    {% for member in non_borrowers %}
+                        <option value="{{ member.id }}">{{ member }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">ยืม</button>
+            </form>
+        {% endif %}
+    </div>
 
-    <a href="{% url 'books:index' %}">กลับหน้ารายการ</a>
+    <a class="back" href="{% url 'books:index' %}">กลับหน้ารายการ</a>
 {% endblock %}
