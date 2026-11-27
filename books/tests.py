@@ -107,3 +107,15 @@ class CsrfTestCase(TestCase):
     def test_form_has_csrf_token(self):
         response = self.client.get(f"/books/{self.book.id}")
         self.assertContains(response, "csrfmiddlewaretoken")
+
+
+class CacheTestCase(TestCase):
+
+    def test_index_has_cache_header(self):
+        response = self.client.get("/books/")
+        self.assertIn("max-age=30", response["Cache-Control"])
+
+    def test_book_page_has_no_cache_header(self):
+        book = Book.objects.create(title="Python", copies=1)
+        response = self.client.get(f"/books/{book.id}")
+        self.assertNotIn("max-age", response.get("Cache-Control", ""))

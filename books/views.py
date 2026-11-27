@@ -1,12 +1,14 @@
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_POST
 
 from .models import Book, Member
 from .rules import can_borrow
 
 
+@cache_page(30)
 def index(request):
     return render(request, "books/index.html", {
         "books": Book.objects.all()
