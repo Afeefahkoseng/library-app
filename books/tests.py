@@ -65,3 +65,23 @@ class LibraryTestCase(TestCase):
         response = self.client.post(f"/books/{book.id}/borrow", {"member": member.id})
         self.assertEqual(response.status_code, 400)
         self.assertEqual(member.books.count(), 3)
+
+
+class SecurityTestCase(TestCase):
+    PAYLOAD = "<script>alert('hi')</script>"
+
+    def test_book_title_is_escaped(self):
+        book = Book.objects.create(title=self.PAYLOAD, copies=1)
+        for url in ["/books/", f"/books/{book.id}"]:
+            response = self.client.get(url)
+            self.assertNotContains(response, self.PAYLOAD)
+            self.assertContains(response, "&lt;script&gt;")
+
+    def test_member_name_is_escaped(self):
+        book = Book.objects.create(title="Python", copies=2)
+        borrower = Member.objects.create(name=self.PAYLOAD)
+        borrower.books.add(book)
+        Member.objects.create(name=self.PAYLOAD)
+        response = self.client.get(f"/books/{book.id}")
+        self.assertNotContains(response, self.PAYLOAD)
+        self.assertContains(response, "&lt;script&gt;")
