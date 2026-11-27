@@ -1,3 +1,5 @@
+from django.core.exceptions import ImproperlyConfigured
+
 """
 Django settings for library project.
 
@@ -20,11 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-k(boa25tdr&&+mtv=hk5j4s@f_*iw0_lyca&vop8==dr8+hk^j"
+# อ่านค่าจาก environment แทนการเขียนรหัสลับไว้ในโค้ด
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-only-key")
+DEBUG = os.environ.get("DEBUG", "1") == "1"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# กันพลาด: ถ้าปิด DEBUG (ใช้งานจริง) ต้องตั้ง SECRET_KEY เอง
+if not DEBUG and SECRET_KEY == "dev-only-key":
+    raise ImproperlyConfigured("ต้องตั้งค่า SECRET_KEY ก่อนปิด DEBUG")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
