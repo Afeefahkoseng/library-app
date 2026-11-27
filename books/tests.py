@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import Client, TestCase
 
 from .models import Book, Member
 
@@ -85,3 +85,25 @@ class SecurityTestCase(TestCase):
         response = self.client.get(f"/books/{book.id}")
         self.assertNotContains(response, self.PAYLOAD)
         self.assertContains(response, "&lt;script&gt;")
+
+class CsrfTestCase(TestCase):
+
+    def setUp(self):
+        self.book = Book.objects.create(title="Python", copies=2)
+        self.member = Member.objects.create(name="Alice")
+
+    def test_post_without_token_is_rejected(self):
+        strict = Client(enforce_csrf_checks=True)
+        response = strict.post(
+            f"/books/{self.book.id}/borrow", {"member": self.member.id})
+        self.assertEqual(response.status_code, 403)
+        self.assertNotIn(self.book, self.member.books.all())
+
+    def test_get_cannot_borrow(self):
+        response = self.client.get(f"/books/{self.book.id}/borrow")
+        self.assertEqual(response.status_code, 405)
+        self.assertNotIn(self.book, self.member.books.all())
+
+    def test_form_has_csrf_token(self):
+        response = self.client.get(f"/books/{self.book.id}")
+        self.assertContains(response, "csrfmiddlewaretoken")
